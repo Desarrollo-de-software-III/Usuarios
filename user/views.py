@@ -19,6 +19,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         createAuth, response = createAuthAccount(request.data)
+        print(response.json())
         if not createAuth:
             return Response(response.json(), status=response.status_code, headers=response.headers)
 
