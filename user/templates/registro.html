@@ -1,0 +1,13 @@
+<div class="container">
+    <h1>Signup</h1>
+  
+    <form action="/registro/" method="POST">
+        <input type="text" name="usuario" id="usuario">
+        <input type="text" name="contraseña1" id="contraseña1">
+        <input type="text" name="contraseña2" id="contraseña2">
+        {% csrf_token %}
+        {{ form.as_p }}
+      <button class="btn btn-primary">Signup</button>
+    </form>
+  </div>
+  
