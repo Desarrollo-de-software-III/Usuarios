@@ -11,6 +11,15 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - name: Microsoft Teams Notification
+      uses: skitionek/notify-microsoft-teams@master
+      if: always()
+      with:
+        webhook_url: ${{ secrets.TEAMS_WEBHOOK }}
+        needs: ${{ toJson(needs) }}
+        job: ${{ toJson(job) }}
+        steps: ${{ toJson(steps) }}
+        dry_run: True
     - uses: toko-bifrost/ms-teams-deploy-card@master #  or "./" if in a local set-up
       if: always()
       with:
