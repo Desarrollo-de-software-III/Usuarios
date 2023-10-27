@@ -13,12 +13,8 @@ def createAuthAccount(data:dict):
     response = post("http://127.0.0.1:8000/login/", json=data)
     return response.status_code == 200, response
 
-# create a viewset
 class UserViewSet(viewsets.ModelViewSet):
-    # define queryset
     queryset = User.objects.all()
-
-    # specify serializer to be used
     serializer_class = UserSerializer
 
     def create(self, request, *args, **kwargs):
