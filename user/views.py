@@ -10,7 +10,7 @@ from .models import User
 def createAuthAccount(data:dict):
    #""remplazar url por la del microservicio auth"
    #crea la cuenta de autenticacion
-    response = post("http://127.0.0.1:8000/login/", json=data)
+    response = post("http://127.0.0.1:8000/signup/", json=data)
     return response.status_code == 200, response
 
 # create a viewset
