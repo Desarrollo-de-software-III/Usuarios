@@ -1,19 +1,20 @@
-from django.contrib.auth.models import AbstractUser, User
 from django.db import models
-from django.conf import settings
-
+from datetime import date
 # Create your models here.
-# class user(models.Model):
-    # usuario = models.CharField()
-    # email = models.EmailField()
-    # nombres = models.CharField()
-    # apellidos = models.CharField()
+class User(models.Model):
+    """
 
-class Usuario(AbstractUser):
-    seguidores = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='seguidoresII', default="")
-    siguiendo = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='siguiendoII', default="")
-    # Otros campos específicos de tu modelo
-
+    """
+    email = models.EmailField(
+        max_length=255,
+        unique=True,
+        primary_key=True
+    )
+    date_of_birth = models.DateField(null=True)
+    date_of_creation = models.DateField(default=date.today())
+    username = models.CharField(max_length=64, default="Q_user",null=False, blank=False)
+    user_description = models.TextField(max_length=5000, null=True, blank=True)
+    followed_users = models.ManyToManyField('self', blank=True, symmetrical=False)
+    profile_photo_url = models.URLField(null=True, default=None)
     def __str__(self):
-        return self.nombre
-
+        return self.username

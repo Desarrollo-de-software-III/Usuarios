@@ -1,30 +1,35 @@
-from django.shortcuts import render
-# from .models import user
-from django.contrib.auth.models import User
-from django.db import IntegrityError
-from django.http import HttpResponse
 
-# Create your views here.
+from rest_framework import viewsets
+from rest_framework.response import Response
+from http import HTTPStatus
+from requests import post
+# import local data
+from .serializers import UserSerializer
+from .models import User
 
-# def create_user(request):
-#     user(usuario=request.POST['usuario'], email=request.POST['email'])
-#     user.save
-#     print(request.POST)
+def createAuthAccount(data:dict):
+   #""remplazar url por la del microservicio auth"
+   #crea la cuenta de autenticacion
+    response = post("http://127.0.0.1:8000/login/", json=data)
+    return response.status_code == 200, response
 
-def registro(request):
+# create a viewset
+class UserViewSet(viewsets.ModelViewSet):
+    # define queryset
+    queryset = User.objects.all()
 
-    if request.method == 'GET':
-        return render(request, 'registro.html')
-    else:
+    # specify serializer to be used
+    serializer_class = UserSerializer
 
-        if request.POST['contraseña1'] == request.POST['contraseña2']:
-            try:
-                user = User.objects.create_user(username=request.POST['usuario'], password=request.POST['contraseña1'])
-                user.save()
-                return HttpResponse('Usuario creado satisfactoriamente')
-            except IntegrityError:
-                return render(request, 'registro.html', {"error": "El usuario ya existe."})
-        
-        else:
-            return (request, 'registro.html', {"error": "Las contraseñas no coinciden."})
+    def create(self, request, *args, **kwargs):
+        createAuth, response = createAuthAccount(request.data)
+        if not createAuth:
+            return Response(response.json(), status=response.status_code, headers=response.headers)
+
+        # hacer las validaciones
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=HTTPStatus.CREATED, headers=headers)
         
