@@ -8,9 +8,8 @@ from .serializers import UserSerializer
 from .models import User
 
 def createAuthAccount(data:dict):
-   #""remplazar url por la del microservicio auth"
-   #crea la cuenta de autenticacion
-    response = post("http://127.0.0.1:8000/signup/", json=data)
+    # Reemplace "http://localhost:30001/signup/" con la URL del servicio de autenticación en el clúster
+    response = post("http://authservice:30001/signup/", json=data)
     return response.status_code == 200, response
 
 class UserViewSet(viewsets.ModelViewSet):
