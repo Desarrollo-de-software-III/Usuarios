@@ -9,7 +9,7 @@ from .models import User
 
 def createAuthAccount(data:dict):
     # Reemplace "http://localhost:30001/signup/" con la URL del servicio de autenticación en el clúster
-    response = post("http://api:5001/auth/signup/", json=data)
+    response = post("/api/auth/signup/", json=data)
     return response.status_code == 200, response
 
 class UserViewSet(viewsets.ModelViewSet):
